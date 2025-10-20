@@ -1,0 +1,26 @@
+{
+  "name": "auth0-for-ai-agents",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "@auth0/ai-langchain": "^4.0.0",
+    "@langchain/core": "^0.3.78",
+    "@langchain/langgraph": "^0.4.9",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-openid-connect": "^2.19.2",
+    "http-errors": "~1.6.3",
+    "langchain": "^0.3.36",
+    "morgan": "~1.9.1",
+    "pug": "3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
