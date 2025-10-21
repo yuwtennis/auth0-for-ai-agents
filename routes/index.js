@@ -1,29 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const { auth } = require('express-openid-connect')
+const Config = require('../env')
 
-const { auth, requiresAuth } = require('express-openid-connect')
-
-const config = {
-    authRequired: false,
-    auth0Logout: true,
-    baseURL: 'http://localhost:3000',
-    clientID: 'SrQLFhgPgfTw2nIJsvBR1yHGFJ1D2Ge5',
-    issuerBaseURL: 'https://dev-ezn2m2421tt4b0iz.us.auth0.com',
-    secret: 'LONG_RANDOM_STRING',
-    idpLogout: true
-}
-
-router.use(auth(config));
+router.use(auth(Config.auth0_config));
 
 /* GET home page. */
 router.get(
     '/',
     (
         req,
-        res, next) => {
+        res
+    ) => {
         /* TODO Do RAG*/
         if(req.oidc.isAuthenticated()) {
-            res.render('index', { title: 'Express' })
+            res.render('index', { user: req.oidc.user.email })
         } else {
             res.send('Logged out' );
         }
