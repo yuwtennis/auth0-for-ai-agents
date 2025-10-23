@@ -20,9 +20,3 @@ resource "auth0_client_credentials" "ai_agent_cred" {
   client_id = auth0_client.ai_agent.id
   authentication_method = "client_secret_basic"
 }
-
-resource "auth0_connection_client" "ai_agent_auth_connection" {
-
-  client_id     = auth0_client.ai_agent.id
-  connection_id = auth0_connection.username_password_authentication.id
-}

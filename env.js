@@ -11,7 +11,8 @@ const auth0_config = {
 }
 
 const app_config = {
-    openaiModel: process.env.OPENAI_MODEL,
+    openaiAgentModel: process.env.OPENAI_AGENT_MODEL,
+    openaiEmbeddingsModel: process.env.OPENAI_EMBEDDINGS_MODEL,
     openAIApiKey: process.env.OPENAI_API_KEY,
 }
 

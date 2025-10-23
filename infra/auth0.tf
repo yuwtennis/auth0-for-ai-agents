@@ -167,7 +167,11 @@ resource "auth0_prompt_custom_text" "en_email_otp_challenge" {
 # __generated__ by Terraform from "con_kgV3n1bXZsmtGFmq"
 resource "auth0_connection_clients" "username_password_authentication" {
   connection_id   = "con_kgV3n1bXZsmtGFmq"
-  enabled_clients = ["L07AVdu8iK4b1m58nOG3axHPfPDgVNds", "ZTwlCuP0pGaU0stfQGGmQSxPONR9A85c"]
+  enabled_clients = [
+    "L07AVdu8iK4b1m58nOG3axHPfPDgVNds",  // Default App
+    "ZTwlCuP0pGaU0stfQGGmQSxPONR9A85c",  // Terraform
+    auth0_client.ai_agent.id
+  ]
 }
 
 # __generated__ by Terraform from "L07AVdu8iK4b1m58nOG3axHPfPDgVNds"

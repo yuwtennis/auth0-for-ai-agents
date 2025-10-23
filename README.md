@@ -41,20 +41,12 @@ Set environment variables for openfga.
 Check the official github([link](https://github.com/openfga/terraform-provider-openfga?tab=readme-ov-file#environment-variables) for more info.
 
 ```shell
-# Step 01. Install the CLI
-# Install the CLI by following the steps at https://docs.fga.dev/integration/install-sdk
-
-# Step 02. Set the relevant environment variables
 export FGA_API_URL='https://api.us1.fga.dev'
-export FGA_STORE_ID='01K7V7BAZAP73K8G0ZCDG0QDCX'
-# export FGA_MODEL_ID='YOUR_MODEL_ID' # Optionally, you can specify a model id to target, which can improve latency
 export FGA_API_TOKEN_ISSUER='auth.fga.dev'
 export FGA_API_AUDIENCE='https://api.us1.fga.dev/'
 export FGA_CLIENT_ID='DktZjSm8vGeu3SLyczlvmG6lKfehiJrY'
 export FGA_CLIENT_SECRET='usDU-ZfhCcYUAPcD8ZThBW30T7U7hVKUg8m_Mly1lbFjBUjqBv2HkyVSTFUgZtXr'
-
-# Step 03. Interact with the store
-fga model get
+export TF_VAR_FGA_STORE_ID='01K7V7BAZAP73K8G0ZCDG0QDCX'
 ```
 
 ## Generate Terraform for auth0

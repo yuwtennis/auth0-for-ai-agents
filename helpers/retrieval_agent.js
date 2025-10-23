@@ -1,7 +1,7 @@
 const {createReactAgent} = require("langchain/agents");
 const {ChatOpenAI} = require("@langchain/openai");
 const {Document} = require("@langchain/core/documents");
-const {fs} = require("node:fs/promises");
+const fs = {readdir, readFile} = require("node:fs/promises");
 const {app_config} = require("../env");
 
 
@@ -18,7 +18,9 @@ class RetrievalAgent {
         const retrievalAgent = createReactAgent({
             llm: new ChatOpenAI({
                 temperature: 0,
-                model: app_config.openaiModel
+                model: app_config.openaiAgentModel,
+                maxRetries: 1,
+                cache: true
             }),
             tools,
             stateModifier: [

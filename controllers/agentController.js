@@ -3,19 +3,20 @@ const {OpenAIEmbeddings} =  require("@langchain/openai");
 const {MemoryVectorStore} = require("langchain/vectorstores/memory");
 const  {FGARetriever} = require("@auth0/ai-langchain/RAG");
 const {readDocuments, RetrievalAgent} = require("../helpers/retrieval_agent");
+const {app_config} = require("../env");
 
 exports.agent_call_get = async (req, res) => {
-    console.info(
-        "\n..:: LangGraph Agents Example: Agentic Retrieval with Auth0 FGA \n\n"
-    );
 
-    const user = res.oidc.user.sub;
+    const question = "Show me forecast for ZEKO?";
+    const user = req.oidc.user.sub;
     // 1. Read and load documents from the assets folder
     const documents = await readDocuments();
     // 2. Create an in-memory vector store from the documents for OpenAI models.
     const vectorStore = await MemoryVectorStore.fromDocuments(
         documents,
-        new OpenAIEmbeddings({ model: process.env.OPENAI_MODEL})
+        new OpenAIEmbeddings({
+            model: app_config.openaiEmbeddingsModel,
+            maxRetries: 1})
     );
     // 3. Create a retriever that uses FGA to gate fetching documents on permissions.
     const retriever = FGARetriever.create({
@@ -23,7 +24,7 @@ exports.agent_call_get = async (req, res) => {
         // FGA tuple to query for the user's permissions
         buildQuery: (doc) => ({
             user: `user:${user}`,
-            object: `doc:${doc.metadata.id}`,
+            object: `document:${doc.metadata.id}`,
             relation: "viewer",
         }),
     });
@@ -33,7 +34,11 @@ exports.agent_call_get = async (req, res) => {
     // populating the "query" argument, until it can answer the user's question.
     const retrievalAgent = RetrievalAgent.create([fgaTool]);
     // 6. Query the retrieval agent with a prompt
-    const answer = await retrievalAgent.query("Show me forecast for ZEKO?");
+    const answer = await retrievalAgent.query(question);
 
-    console.info(answer);
+    res.render('agent', {
+        headline: "..:: LangGraph Agents Example: Agentic Retrieval with Auth0 FGA",
+        question: "Show me forecast for ZEKO?",
+        answer: answer
+    });
 }
