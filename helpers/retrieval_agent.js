@@ -1,9 +1,9 @@
-const {createReactAgent} = require("langchain/agents");
+const {createReactAgent} = require("@langchain/langgraph/prebuilt");
 const {ChatOpenAI} = require("@langchain/openai");
 const {Document} = require("@langchain/core/documents");
-const fs = {readdir, readFile} = require("node:fs/promises");
+const {readdir, readFile} = require("node:fs/promises");
 const {app_config} = require("../env");
-
+const {HumanMessage} = require("@langchain/core/messages");
 
 class RetrievalAgent {
     #agent;
@@ -14,48 +14,47 @@ class RetrievalAgent {
 
     // Create a retrieval agent with a retriever tool and a language model
     static create(tools) {
-        // Create a retrieval agent that has access to the retrieval tool.
-        const retrievalAgent = createReactAgent({
-            llm: new ChatOpenAI({
-                temperature: 0,
-                model: app_config.openaiAgentModel,
-                maxRetries: 1,
-                cache: true
-            }),
-            tools,
-            stateModifier: [
-                "Answer the user's question only based on context retrieved from provided tools.",
-                "Only use the information provided by the tools.",
-                "If you need more information, ask for it.",
-            ].join(" "),
+        const llm = new ChatOpenAI({
+            temperature: 0,
+            model: app_config.openaiAgentModel,
+            maxRetries: 1,  // Safeguard for limit rate
+            cache: false
         });
 
-        return new RetrievalAgent(retrievalAgent);
+        const systemMessage = [
+            "Answer the user's question only based on context retrieved from provided tools.",
+            "Only use the information provided by the tools.",
+            "If you need more information, ask for it.",
+        ].join(" ");
+
+        // Create a retrieval agent that has access to the retrieval tool.
+        const agent = createReactAgent({
+            llm,
+            tools,
+            messageModifier: systemMessage
+        });
+
+        return new RetrievalAgent(agent);
     }
 
     // Query the retrieval agent with a user question
     async query(query) {
         const { messages } = await this.#agent.invoke({
-            messages: [
-                {
-                    role: "user",
-                    content: query,
-                },
-            ],
+            messages: [new HumanMessage(query)],
         });
 
-        return messages.at(-1)?.content;
+        return messages;
     }
 }
 
 async function readDoc(path) {
-    return await fs.readFile(path, "utf-8");
+    return await readFile(path, "utf-8");
 }
 
 /* Reads documents from the assets folder and converts them to langChain Documents */
 async function readDocuments() {
     const folderPath = "./assets";
-    const files = await fs.readdir(folderPath);
+    const files = await readdir(folderPath);
     const documents = [];
 
     for (const file of files) {
