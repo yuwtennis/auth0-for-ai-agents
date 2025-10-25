@@ -170,7 +170,7 @@ resource "auth0_connection_clients" "username_password_authentication" {
   enabled_clients = [
     "L07AVdu8iK4b1m58nOG3axHPfPDgVNds",  // Default App
     "ZTwlCuP0pGaU0stfQGGmQSxPONR9A85c",  // Terraform
-    auth0_client.ai_agent.id
+    auth0_client.ai_agent.id             // Development env client
   ]
 }
 
