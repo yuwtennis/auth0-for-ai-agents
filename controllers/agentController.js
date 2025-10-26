@@ -42,6 +42,7 @@ exports.agent_call_get = async (req, res) => {
         );
     // 6. Query the retrieval agent with a prompt
     const messages = await retrievalAgent.query(QUESTION);
+    console.log(messages);
 
     if(messages.at(2).content.length === 0
         && messages.at(-1).invalid_tool_calls.length === 0) {
