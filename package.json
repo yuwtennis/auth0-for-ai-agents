@@ -9,7 +9,7 @@
   },
   "type": "commonjs",
   "engines": {
-    "node": "~>=24.6.0"
+    "node": "24.x"
   },
   "dependencies": {
     "@auth0/ai": "^5.0.1",
