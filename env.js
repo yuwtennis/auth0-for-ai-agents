@@ -14,6 +14,12 @@ const app_config = {
     openaiAgentModel: process.env.OPENAI_AGENT_MODEL,
     openaiEmbeddingsModel: process.env.OPENAI_EMBEDDINGS_MODEL,
     openAIApiKey: process.env.OPENAI_API_KEY,
+    fgaApiUrl: process.env.FGA_API_URL,
+    fgaApiTokenIssuer: process.env.FGA_API_TOKEN_ISSUER,
+    fgaApiAudience: process.env.FGA_API_AUDIENCE,
+    fgaClientId: process.env.FGA_CLIENT_ID,
+    fgaClientSecret: process.env.FGA_CLIENT_SECRET,
+    fgaStoreId: process.env.FGA_STORE_ID,
 }
 
 module.exports = {
