@@ -23,6 +23,7 @@ exports.agent_call_get = async (req, res) => {
             maxRetries: 1})  // Safeguard for limit rate
     );
     // 3. Create a retriever that uses FGA to gate fetching documents on permissions.
+    // Set explicit cred params
     const retriever = FGARetriever.create({
         retriever: vectorStore.asRetriever(),
         // FGA tuple to query for the user's permissions
@@ -31,6 +32,17 @@ exports.agent_call_get = async (req, res) => {
             object: `document:${doc.metadata.id}`,
             relation: "viewer",
         }),
+    }, {
+        apiUrl: app_config.fgaApiUrl,
+        storeId: app_config.fgaStoreId,
+        credentials: {
+            config: {
+                apiTokenIssuer: app_config.fgaApiTokenIssuer,
+                apiAudience: app_config.fgaApiAudience,
+                clientId: app_config.fgaClientId,
+                clientSecret: app_config.fgaClientSecret
+            }
+        }
     });
     // 4. Convert the retriever into a tool for an agent.
     const fgaTool = retriever.asJoinedStringTool();
