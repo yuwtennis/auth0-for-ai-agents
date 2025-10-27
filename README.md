@@ -1,57 +1,67 @@
 # auth0-for-ai-agents
 
-Notes
-
-This prototype is intended for implementing the [prompt](https://dev.to/devteam/join-the-auth0-for-ai-agents-challenge-3000-in-prizes-11gi).  
-
-
-## Point of View statement
-
-Bob works at IT team at EMarket , an online e-commerce company .  
-The company wants to provide chat services to their employee to boost productivity.  
-The team wants to first launch the service to LIMIED team as prototype and gather information with usability testing.
-
-
-## Requirements
-
-- The RAG will be generated using the test data which the IT team manages. That is ,
-    - IT team manages vecstor store , test_it_rag_vs
-- The user of chat service will be authenticated at first access.
-
+This prototype is intended for the [Auth0 for AI agents challenge](https://dev.to/devteam/join-the-auth0-for-ai-agents-challenge-3000-in-prizes-11gi) from the DEV community.
 
 ## Pre-requisite
 
-- M2M Credential for bootstrapping with terraform. See doc([link](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/quickstart)). 
+- [M2M Credential for bootstrapping with terraform](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/quickstart)
+- [Auth0 FGA account setup](https://dashboard.fga.dev/customers/01K7V7BA2YG20WKAZB3JYKN585)
+- [OpenAPI platform API](https://platform.openai.com/docs/libraries#create-and-export-an-api-key)
+- NodeJS
+- Terraform client
 - Optional [asdf](https://asdf-vm.com/) >= `0.18.0`
 
-## How to's
+## How tos
 
-### Setup Auth0
+### Setup Auth0 and Auth0 FGA account
 
-Set environment variables for Auth0.
-Check the official doc([link](https://registry.terraform.io/providers/auth0/auth0/latest/docs) for more info.
+Directory `infra/` includes sample terraform manifests created from my _Auth0_ and _Auth0 FGA_ account as a reference.  
+If you are using this repository, replace with your manifest. Check docs for information to apply the code.
+
+- [Auto-generating Terraform config files from Auth0 tenant](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/generate_terraform_config)
+- [openfga terraform getting started](https://github.com/openfga/terraform-provider-openfga?tab=readme-ov-file#getting-started)
+
+This is a reference. So do not apply to your environment !
+
+### Launch nodejs
+
+Install packages
 
 ```shell
-export AUTH0_DOMAIN=***********
-export AUTH0_CLIENT_ID=***********
-export AUTH0_CLIENT_SECRET=***********
+npm i
 ```
-
-Set environment variables for openfga.  
-Check the official github([link](https://github.com/openfga/terraform-provider-openfga?tab=readme-ov-file#environment-variables) for more info.
+For dev
 
 ```shell
-export FGA_API_URL='https://api.us1.fga.dev'
-export FGA_API_TOKEN_ISSUER='auth.fga.dev'
-export FGA_API_AUDIENCE='https://api.us1.fga.dev/'
-export FGA_CLIENT_ID='DktZjSm8vGeu3SLyczlvmG6lKfehiJrY'
-export FGA_CLIENT_SECRET='usDU-ZfhCcYUAPcD8ZThBW30T7U7hVKUg8m_Mly1lbFjBUjqBv2HkyVSTFUgZtXr'
-export TF_VAR_FGA_STORE_ID='01K7V7BAZAP73K8G0ZCDG0QDCX'
+npm run dev
 ```
 
-## Generate Terraform for auth0
+For otheruse
+```shell
+npm run start
+```
 
-Single tenant is only available for _free_ version .  
-The codebase in this repository is generated from my default tenant using the [online guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/generate_terraform_config).
+### Login and logout
 
-Please REPLACE with your own definition when you are cloning this repository.
+Below is example for accessing dev environment.
+
+Login
+
+```shell
+http://localhost:3000/login
+```
+
+Logout
+```shell
+http://localhost:3000/logout
+```
+
+Agent call
+```shell
+http://localhost:3000/agent/call
+```
+
+## References
+
+- [Quickstart with Express js](https://auth0.com/docs/quickstart/webapp/express/01-login)
+- [Authorization for RAG](https://auth0.com/ai/docs/get-started/authorization-for-rag)
