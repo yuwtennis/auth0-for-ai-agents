@@ -38,6 +38,7 @@ export default async function Home() {
     });
 
   // 2. Manually instrument the pipeline
+  // TODO observe case when there is an unexpected authorization error
   await inspectRun("agent-call-simulation", async () => {
       // a. pipline steps
       await step("plan", async () => {});

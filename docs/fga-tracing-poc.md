@@ -87,16 +87,16 @@ graph LR
 
 ### Component Roles
 
-| Component | Role in PoC |
-|-----------|-------------|
-| `src/app/page.tsx` | Next.js Server Component; runs the full agent pipeline per request |
-| `src/proxy.ts` | Auth0 middleware wired into Next.js `middleware.ts` |
-| `src/lib/auth0.ts` | Shared `Auth0Client` instance |
-| `src/lib/schemas.ts` | Zod schemas for FGA config and check response |
-| `inspectRun` / `step` / `observeOutcome` | Manual pipeline instrumentation from `agent-inspect` |
-| `OpenFgaClient` (`@openfga/sdk`) | Performs the FGA `check` call directly |
-| Auth0 FGA (OpenFGA) | Ground truth for authorization |
-| `.agent-inspect-authz/<run-id>.jsonl` | Immutable, human-readable audit trail written locally |
+| Component                                | Role in PoC                                                        |
+|------------------------------------------|--------------------------------------------------------------------|
+| `src/app/page.tsx`                       | Next.js Server Component; runs the full agent pipeline per request |
+| `src/proxy.ts`                           | Auth0 middleware wired into Next.js `middleware.ts`                |
+| `src/lib/auth0.ts`                       | Shared `Auth0Client` instance                                      |
+| `src/lib/schemas.ts`                     | Zod schemas for FGA config and check response                      |
+| `inspectRun` / `step` / `observeOutcome` | Manual pipeline instrumentation from `agent-inspect`               |
+| `OpenFgaClient` (`@openfga/sdk`)         | Performs the FGA `check` call directly                             |
+| Auth0 FGA (OpenFGA)                      | Ground truth for authorization                                     |
+| `.agent-inspect-authz/<run-id>.jsonl`    | Immutable, human-readable audit trail written locally              |
 
 Key design point: the pipeline is instrumented at each logical step boundary. The FGA check is wrapped in `step.tool("check-fga")`, so the trace records the tool invocation and its implicit outcome (the `allowed` boolean) even though no LangChain abstraction is involved.
 
@@ -110,14 +110,14 @@ This PoC is limited to verifying observability. It does **not** change authoriza
 
 ## Success Criteria
 
-| # | Criterion |
-|---|-----------|
+| # | Criterion                                                                                                                                     |
+|---|-----------------------------------------------------------------------------------------------------------------------------------------------|
 | 1 | `agent-inspect` is installed and its manual API (`inspectRun`, `step`, `observeOutcome`) is wired into the Next.js Server Component pipeline. |
-| 2 | A trace file is written under `.agent-inspect-authz/` after a single page load for an authenticated user. |
-| 3 | The trace contains a `check-fga` tool step entry corresponding to the FGA authorization check. |
-| 4 | The trace contains a `protected-action` LLM step entry only when FGA returns `allowed: true`. |
-| 5 | `observeOutcome` records pass/fail status that correlates with the FGA decision. |
-| 6 | A human reviewer can open the JSONL file and reconstruct the agent's decision path without access to runtime logs. |
+| 2 | A trace file is written under `.agent-inspect-authz/` after a single page load for an authenticated user.                                     |
+| 3 | The trace contains a `check-fga` tool step entry corresponding to the FGA authorization check.                                                |
+| 4 | The trace contains a `protected-action` LLM step entry only when FGA returns `allowed: true`.                                                 |
+| 5 | `observeOutcome` records pass/fail status that correlates with the FGA decision.                                                              |
+| 6 | A human reviewer can open the JSONL file and reconstruct the agent's decision path without access to runtime logs.                            |
 
 ---
 
@@ -300,6 +300,8 @@ auth0-for-ai-agents/
 
 ## Insight
 After running the test, below are the results of `npx agent-inspect list` and `npx agent-inspect report`.
+
+TODO case(c) for an unexpected authorization error.
 
 ```markdown
 $ npx agent-inspect list --dir .agent-inspect-authz
